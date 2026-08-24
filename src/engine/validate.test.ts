@@ -48,14 +48,14 @@ describe('validate — tile counts', () => {
   })
 
   it('reports how many tiles are still needed', () => {
-    const result = validate(hand('123m456m789m12p', '2p'), ctx())
+    const result = validate(hand('123m456m789m1p', '2p'), ctx())
     expect(result.ok).toBe(false)
     expect(result.issues).toContainEqual({ code: 'incomplete', tilesNeeded: 3 })
   })
 
   it('reports an overfull hand', () => {
     const result = validate(hand('123m456m789m123p11s2s', '2s'), ctx())
-    expect(result.issues).toContainEqual({ code: 'too-many-tiles', excess: 1 })
+    expect(result.issues).toContainEqual({ code: 'too-many-tiles', excess: 2 })
   })
 
   it('counts a meld as three slots even when it is a kan', () => {
