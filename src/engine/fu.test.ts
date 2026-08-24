@@ -81,6 +81,18 @@ describe('computeFu — triplets and kans', () => {
         note: 'completed by ron' })
   })
 
+  it('leaves a concealed triplet completed by tsumo as a closed triplet', () => {
+    // Mirror of the ron case above: same shanpon shape, drawn instead of claimed,
+    // so 111m stays ankou (terminal, 8 fu) rather than becoming minko (4 fu).
+    const h = hand('11m345m456p678s99s', '1m', 'tsumo')
+    const shanpon = decompose(h).find((i) =>
+      i.groups.some((g) => g.kind === 'triplet' && g.containsWinningTile))!
+    const result = computeFu(shanpon, h, ctx(), WRC_2025)
+    expect(result.lines.find((l) => l.id === 'ankou')).toEqual(
+      { id: 'ankou', fu: 8, tile: { suit: 'm', rank: 1, red: false } })
+    expect(result.lines.find((l) => l.id === 'minko')).toBeUndefined()
+  })
+
   it('scores the four kan types correctly', () => {
     const kan = (kind: Meld['kind'], notation: string): Meld =>
       ({ kind, tiles: parseTiles(notation) })
