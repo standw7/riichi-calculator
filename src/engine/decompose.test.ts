@@ -45,8 +45,10 @@ describe('decompose — standard hands', () => {
   })
 
   it('does not build a sequence across a suit boundary', () => {
-    // 9m 1p 2p must not read as a sequence.
-    const result = decompose(hand('99m12p345p678p11s', '1s'))
+    // 9m 1p 2p would be a valid run only if sequences could cross suits.
+    // Everything else resolves: 345p, 678p, 123s, 99s. So the only reading
+    // that completes this hand is the illegal one, and there must be none.
+    const result = decompose(hand('9m12345678p1239s', '9s'))
     expect(result).toHaveLength(0)
   })
 
