@@ -8,3 +8,40 @@ export interface Tile {
   rank: number
   red: boolean
 }
+
+export type MeldKind = 'chi' | 'pon' | 'minkan' | 'ankan' | 'shouminkan'
+
+export interface Meld {
+  kind: MeldKind
+  tiles: Tile[]
+  /** Which tile was claimed from another player. Absent for an ankan. */
+  calledTile?: Tile
+}
+
+export type WinSource = 'ron' | 'tsumo'
+
+export interface Hand {
+  concealed: Tile[]
+  melds: Meld[]
+  winningTile: Tile
+  winSource: WinSource
+}
+
+export type RiichiState = 'none' | 'riichi' | 'double'
+
+export interface WinContext {
+  seatWind: Wind
+  roundWind: Wind
+  riichi: RiichiState
+  ippatsu: boolean
+  haitei: boolean
+  houtei: boolean
+  rinshan: boolean
+  chankan: boolean
+  tenhou: boolean
+  chiihou: boolean
+  doraIndicators: Tile[]
+  uraIndicators: Tile[]
+  honba: number
+  riichiSticks: number
+}
