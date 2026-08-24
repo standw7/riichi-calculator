@@ -79,7 +79,7 @@ export function sortTiles(tiles: Tile[]): Tile[] {
   return [...tiles].sort((a, b) => {
     const byId = tileId(a) - tileId(b)
     if (byId !== 0) return byId
-    // Red fives sort before ordinary fives so notation renders '40p6p'.
+    // Red fives sort before ordinary fives at the same tileId, so notation order is deterministic.
     return Number(b.red) - Number(a.red)
   })
 }

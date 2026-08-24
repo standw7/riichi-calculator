@@ -78,6 +78,10 @@ describe('parseTiles', () => {
     expect(() => parseTiles('1x')).toThrow('Unknown suit: x')
   })
 
+  it('rejects a red five in the honor suit', () => {
+    expect(() => parseTiles('0z')).toThrow('Honors have no red five')
+  })
+
   it('returns an empty array for an empty string', () => {
     expect(parseTiles('')).toEqual([])
   })
@@ -101,6 +105,10 @@ describe('sortTiles', () => {
 
   it('places a red five alongside ordinary fives', () => {
     expect(tilesToNotation(sortTiles(parseTiles('6p0p4p')))).toBe('406p')
+  })
+
+  it('sorts red fives before ordinary fives at the same tileId', () => {
+    expect(tilesToNotation(sortTiles(parseTiles('505p')))).toBe('055p')
   })
 })
 
