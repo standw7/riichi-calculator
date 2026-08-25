@@ -98,6 +98,7 @@ describe('calculate — yakuman', () => {
       WRC_2025)
     expect(result.best!.yakumanMultiplier).toBe(1)
     expect(result.best!.score.handTotal).toBe(32000)
+    expect(result.best!.han).toBe(0)   // dora must not be added to a yakuman hand
   })
 })
 
