@@ -9,7 +9,10 @@ export interface RuleSet {
   readonly akaDoraCount: number
   /** Whether tanyao may be scored with an open hand. */
   readonly kuitan: boolean
-  /** Whether a yaku may be established only by the winning tile. */
+  /**
+   * Whether a yaku may be established only by the winning tile.
+   * Not yet consumed by the engine — represented per PLD §6.3 / spec §5 ahead of use.
+   */
   readonly atozuke: boolean
   /** Round 4 han 30 fu and 3 han 60 fu up to mangan. */
   readonly kiriageMangan: boolean
@@ -23,8 +26,19 @@ export interface RuleSet {
   readonly doubleWindPairFu: 2 | 4
   /** Fu awarded to an open hand whose shape would otherwise total 20. */
   readonly openPinfuFu: 20 | 30
-  /** Whether pao / sekinin barai liability applies. */
+  /**
+   * Whether pao / sekinin barai liability applies.
+   * Not yet consumed by the engine — represented per PLD §6.3 / spec §5 ahead of use.
+   */
   readonly pao: boolean
+  /**
+   * How renhou is scored.
+   * Not yet consumed by the engine — represented per PLD §6.3 / spec §5 ahead of use.
+   */
   readonly renhou: RenhouTreatment
+  /**
+   * Whether nagashi mangan is awarded.
+   * Not yet consumed by the engine — represented per PLD §6.3 / spec §5 ahead of use.
+   */
   readonly nagashiMangan: boolean
 }

@@ -82,6 +82,11 @@ describe('countDora', () => {
     const result = countDora(
       h, ctx({ riichi: 'riichi', doraIndicators: parseTiles('1p'),
         uraIndicators: parseTiles('1m') }), WRC_2025)
-    expect(result.total).toBe(result.dora + result.aka + result.ura)
+    // 1p indicates 2p, held ×2 (dora); 1m indicates 2m, held once via 234m (ura);
+    // no red fives in this hand (aka).
+    expect(result.dora).toBe(2)
+    expect(result.aka).toBe(0)
+    expect(result.ura).toBe(1)
+    expect(result.total).toBe(3)
   })
 })

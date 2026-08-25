@@ -139,6 +139,18 @@ describe('score — honba and riichi sticks', () => {
     expect(result.payments).toEqual({ kind: 'ron', discarderPays: 1000 })
     expect(result.total).toBe(3000)
   })
+
+  it('adds 100 per honba from each player on a dealer tsumo, and the total reconciles', () => {
+    const result = score(
+      { ...base, han: 3, fu: 30, isDealer: true, winSource: 'tsumo', honba: 2 }, WRC_2025)
+    expect(result.payments).toEqual({ kind: 'tsumo-all', eachPays: 2200 })
+    expect(result.handTotal).toBe(6000)
+    expect(result.total).toBe(6600)
+    // eachPays × 3 must equal total minus riichi-stick payments (0 here) — the payment
+    // split reconstructs the reported total exactly.
+    expect(result.payments.kind === 'tsumo-all' ? result.payments.eachPays * 3 : NaN)
+      .toBe(result.total - base.riichiSticks * 1000)
+  })
 })
 
 describe('score — explanation steps', () => {

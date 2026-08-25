@@ -244,13 +244,15 @@ export const YAKU_COVERAGE: Record<string, CoverageCase> = {
     },
   },
   shousangen: {
-    // Two dragon triplets plus the third dragon as the pair; the negative keeps the two
-    // triplets but replaces the dragon pair with a simple-tile pair.
+    // Two dragon triplets plus the third dragon as the pair. The negative is the near
+    // miss at shousangen's lower boundary: only ONE dragon triplet, with a different
+    // dragon as the pair. Relaxing the implementation's `dragonSets.length !== 2` guard
+    // to `< 2` would let this one-triplet shape through as shousangen; it must not.
     positive: {
       concealed: '555z666z234m567p7z', winningTile: '7z', ctx: { seatWind: 'S', roundWind: 'E' },
     },
     negative: {
-      concealed: '555z666z234m567p8s', winningTile: '8s', ctx: { seatWind: 'S', roundWind: 'E' },
+      concealed: '555z234m567p345s6z', winningTile: '6z', ctx: { seatWind: 'S', roundWind: 'E' },
     },
   },
   honitsu: {

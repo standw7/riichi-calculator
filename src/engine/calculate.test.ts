@@ -36,6 +36,26 @@ describe('calculate — happy path', () => {
     expect(result.dora.dora).toBe(2)
     expect(result.best!.han).toBe(5)
   })
+
+  it('adds ura dora to the han count when riichi was declared', () => {
+    const result = calculate(
+      hand('34m55m567p345s678s', '2m'),
+      ctx({ riichi: 'riichi', uraIndicators: parseTiles('4m') }),  // ura dora is 5m, held ×2
+      WRC_2025)
+    expect(result.dora.ura).toBe(2)
+    // riichi + pinfu + tanyao (3 han) + 2 ura dora
+    expect(result.best!.han).toBe(5)
+  })
+
+  it('adds aka dora to the han count under a ruleset that counts red fives', () => {
+    const rules = { ...WRC_2025, akaDoraCount: 1 }
+    const result = calculate(
+      hand('34m05m567p345s678s', '2m'),  // 0m is a red 5m
+      ctx({ riichi: 'riichi' }), rules)
+    expect(result.dora.aka).toBe(1)
+    // riichi + pinfu + tanyao (3 han) + 1 aka dora
+    expect(result.best!.han).toBe(4)
+  })
 })
 
 describe('calculate — validation and yaku requirement', () => {
