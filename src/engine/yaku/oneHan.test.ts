@@ -55,6 +55,15 @@ describe('riichi family', () => {
     expect(yakuOf(h, ctx({ riichi: 'riichi', ippatsu: true }))).toContain('ippatsu')
     expect(yakuOf(h, ctx())).not.toContain('ippatsu')
   })
+
+  it('does not award closed-only yaku to an open hand', () => {
+    // riichi/ippatsu match on context alone, so the openHan: 0 gate in detectYaku
+    // is the only thing excluding them here.
+    const h = hand('34m456p678s55m', '2m', 'ron', [chi('234s')])
+    const ids = yakuOf(h, ctx({ riichi: 'riichi', ippatsu: true }))
+    expect(ids).not.toContain('riichi')
+    expect(ids).not.toContain('ippatsu')
+  })
 })
 
 describe('menzen tsumo', () => {
