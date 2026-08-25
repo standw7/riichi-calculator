@@ -156,9 +156,9 @@ describe('score — honba and riichi sticks', () => {
 describe('score — explanation steps', () => {
   it('records the base-point formula with real numbers', () => {
     const result = score({ ...base, han: 3, fu: 30 }, WRC_2025)
-    const baseStep = result.steps.find((s) => s.label === 'Base points')
+    const baseStep = result.steps.find((s) => s.id === 'base-points')
     expect(baseStep).toEqual({
-      label: 'Base points',
+      id: 'base-points',
       expression: '30 × 2^(2 + 3)',
       value: 960,
     })
@@ -166,9 +166,9 @@ describe('score — explanation steps', () => {
 
   it('records the rounding step for a non-dealer ron', () => {
     const result = score({ ...base, han: 3, fu: 30 }, WRC_2025)
-    const payStep = result.steps.find((s) => s.label === 'Discarder pays')
+    const payStep = result.steps.find((s) => s.id === 'discarder-pays')
     expect(payStep).toEqual({
-      label: 'Discarder pays',
+      id: 'discarder-pays',
       expression: '960 × 4 = 3,840 → rounded up to 3,900',
       value: 3900,
     })

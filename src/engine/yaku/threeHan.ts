@@ -4,18 +4,18 @@ import { hasHonors, sequences, sequenceStart, suitsUsed } from './helpers'
 
 export const THREE_HAN_YAKU: YakuRule[] = [
   {
-    id: 'honitsu', name: 'Honitsu', closedHan: 3, openHan: 2,
+    id: 'honitsu', closedHan: 3, openHan: 2,
     match: ({ interp }) =>
       (suitsUsed(interp).size <= 1 && hasHonors(interp) ? {} : null),
   },
   {
-    id: 'chinitsu', name: 'Chinitsu', closedHan: 6, openHan: 5,
+    id: 'chinitsu', closedHan: 6, openHan: 5,
     supersedes: ['honitsu'],
     match: ({ interp }) =>
       (suitsUsed(interp).size === 1 && !hasHonors(interp) ? {} : null),
   },
   {
-    id: 'junchan', name: 'Junchan', closedHan: 3, openHan: 2,
+    id: 'junchan', closedHan: 3, openHan: 2,
     supersedes: ['chanta'],
     match: ({ interp }) => {
       if (interp.structure !== 'standard') return null
@@ -25,7 +25,7 @@ export const THREE_HAN_YAKU: YakuRule[] = [
     },
   },
   {
-    id: 'ryanpeikou', name: 'Ryanpeikou', closedHan: 3, openHan: 0,
+    id: 'ryanpeikou', closedHan: 3, openHan: 0,
     supersedes: ['iipeikou'],
     match: ({ interp, closed }) => {
       if (!closed || interp.structure !== 'standard') return null

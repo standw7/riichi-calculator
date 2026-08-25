@@ -28,11 +28,11 @@ function isChuurenShape(tiles: Tile[]): boolean {
 
 export const YAKUMAN_YAKU: YakuRule[] = [
   {
-    id: 'kokushi', name: 'Kokushi musou', closedHan: 0, openHan: 0, yakuman: 1,
+    id: 'kokushi', closedHan: 0, openHan: 0, yakuman: 1,
     match: ({ interp }) => (interp.structure === 'kokushi' ? {} : null),
   },
   {
-    id: 'kokushi-13', name: 'Kokushi musou juusan menmachi',
+    id: 'kokushi-13',
     closedHan: 0, openHan: 0, yakuman: 2, supersedes: ['kokushi'],
     match: ({ interp }) =>
       (interp.structure === 'kokushi' &&
@@ -40,13 +40,13 @@ export const YAKUMAN_YAKU: YakuRule[] = [
         ? {} : null),
   },
   {
-    id: 'suuankou', name: 'Suuankou', closedHan: 0, openHan: 0, yakuman: 1,
+    id: 'suuankou', closedHan: 0, openHan: 0, yakuman: 1,
     match: ({ interp, hand }) =>
       (interp.structure === 'standard' && concealedTripletCount(interp, hand) === 4
         ? {} : null),
   },
   {
-    id: 'suuankou-tanki', name: 'Suuankou tanki',
+    id: 'suuankou-tanki',
     closedHan: 0, openHan: 0, yakuman: 2, supersedes: ['suuankou'],
     match: ({ interp, hand }) =>
       (interp.structure === 'standard' &&
@@ -55,14 +55,14 @@ export const YAKUMAN_YAKU: YakuRule[] = [
         ? {} : null),
   },
   {
-    id: 'daisangen', name: 'Daisangen', closedHan: 0, openHan: 0, yakuman: 1,
+    id: 'daisangen', closedHan: 0, openHan: 0, yakuman: 1,
     match: ({ interp }) => {
       const dragons = tripletsAndKans(interp).filter((g) => isDragonTile(g.tiles[0]))
       return dragons.length === 3 ? { groups: dragons } : null
     },
   },
   {
-    id: 'shousuushii', name: 'Shousuushii', closedHan: 0, openHan: 0, yakuman: 1,
+    id: 'shousuushii', closedHan: 0, openHan: 0, yakuman: 1,
     match: ({ interp }) => {
       const winds = tripletsAndKans(interp)
         .filter((g) => g.tiles[0].suit === 'z' && g.tiles[0].rank <= 4)
@@ -73,7 +73,7 @@ export const YAKUMAN_YAKU: YakuRule[] = [
     },
   },
   {
-    id: 'daisuushii', name: 'Daisuushii',
+    id: 'daisuushii',
     closedHan: 0, openHan: 0, yakuman: 2, supersedes: ['shousuushii'],
     match: ({ interp }) => {
       const winds = tripletsAndKans(interp)
@@ -82,29 +82,29 @@ export const YAKUMAN_YAKU: YakuRule[] = [
     },
   },
   {
-    id: 'tsuuiisou', name: 'Tsuuiisou', closedHan: 0, openHan: 0, yakuman: 1,
+    id: 'tsuuiisou', closedHan: 0, openHan: 0, yakuman: 1,
     match: ({ interp }) =>
       (allTilesOf(interp).every((t) => t.suit === 'z') ? {} : null),
   },
   {
-    id: 'chinroutou', name: 'Chinroutou', closedHan: 0, openHan: 0, yakuman: 1,
+    id: 'chinroutou', closedHan: 0, openHan: 0, yakuman: 1,
     match: ({ interp }) =>
       (allTilesOf(interp).every(isTerminal) ? {} : null),
   },
   {
-    id: 'ryuuiisou', name: 'Ryuuiisou', closedHan: 0, openHan: 0, yakuman: 1,
+    id: 'ryuuiisou', closedHan: 0, openHan: 0, yakuman: 1,
     match: ({ interp }) =>
       (allTilesOf(interp).every(isGreenTile) ? {} : null),
   },
   {
-    id: 'chuuren', name: 'Chuuren poutou', closedHan: 0, openHan: 0, yakuman: 1,
+    id: 'chuuren', closedHan: 0, openHan: 0, yakuman: 1,
     match: ({ interp, closed }) => {
       if (!closed || hasHonors(interp) || suitsUsed(interp).size !== 1) return null
       return isChuurenShape(allTilesOf(interp)) ? {} : null
     },
   },
   {
-    id: 'chuuren-9', name: 'Junsei chuuren poutou',
+    id: 'chuuren-9',
     closedHan: 0, openHan: 0, yakuman: 2, supersedes: ['chuuren'],
     match: ({ interp, hand, closed }) => {
       if (!closed || hasHonors(interp) || suitsUsed(interp).size !== 1) return null
@@ -117,18 +117,18 @@ export const YAKUMAN_YAKU: YakuRule[] = [
     },
   },
   {
-    id: 'suukantsu', name: 'Suukantsu', closedHan: 0, openHan: 0, yakuman: 1,
+    id: 'suukantsu', closedHan: 0, openHan: 0, yakuman: 1,
     match: ({ interp }) => {
       const kans = interp.groups.filter((g) => g.kind === 'kan')
       return kans.length === 4 ? { groups: kans } : null
     },
   },
   {
-    id: 'tenhou', name: 'Tenhou', closedHan: 0, openHan: 0, yakuman: 1,
+    id: 'tenhou', closedHan: 0, openHan: 0, yakuman: 1,
     match: ({ ctx }) => (ctx.tenhou ? {} : null),
   },
   {
-    id: 'chiihou', name: 'Chiihou', closedHan: 0, openHan: 0, yakuman: 1,
+    id: 'chiihou', closedHan: 0, openHan: 0, yakuman: 1,
     match: ({ ctx }) => (ctx.chiihou ? {} : null),
   },
 ]

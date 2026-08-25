@@ -9,7 +9,8 @@ export type Payments =
   | { kind: 'tsumo-all'; eachPays: number }
 
 export interface ScoreStep {
-  label: string
+  /** Stable machine key for this step; display copy is looked up by id in src/content. */
+  id: string
   expression: string
   value: number
 }
@@ -53,7 +54,7 @@ function computeBase(input: ScoreInput, rules: RuleSet): BaseResult {
       basePoints: 8000 * yakumanMultiplier,
       limitClass: 'yakuman',
       step: {
-        label: 'Base points',
+        id: 'base-points',
         expression: `yakuman × ${yakumanMultiplier} = 8,000 × ${yakumanMultiplier}`,
         value: 8000 * yakumanMultiplier,
       },
@@ -64,7 +65,7 @@ function computeBase(input: ScoreInput, rules: RuleSet): BaseResult {
     basePoints,
     limitClass,
     step: {
-      label: 'Base points',
+      id: 'base-points',
       expression: `${han} han is a ${limitClass.replace('-', ' ')}`,
       value: basePoints,
     },
@@ -85,7 +86,7 @@ function computeBase(input: ScoreInput, rules: RuleSet): BaseResult {
       basePoints: 2000,
       limitClass: 'mangan',
       step: {
-        label: 'Base points',
+        id: 'base-points',
         expression: `${han} han ${fu} fu is rounded up to mangan by this ruleset`,
         value: 2000,
       },
@@ -98,7 +99,7 @@ function computeBase(input: ScoreInput, rules: RuleSet): BaseResult {
       basePoints: 2000,
       limitClass: 'mangan',
       step: {
-        label: 'Base points',
+        id: 'base-points',
         expression: `${fu} × 2^(2 + ${han}) = ${fmt(raw)}, capped at mangan`,
         value: 2000,
       },
@@ -109,20 +110,20 @@ function computeBase(input: ScoreInput, rules: RuleSet): BaseResult {
     basePoints: raw,
     limitClass: null,
     step: {
-      label: 'Base points',
+      id: 'base-points',
       expression: `${fu} × 2^(2 + ${han})`,
       value: raw,
     },
   }
 }
 
-function payStep(label: string, base: number, multiplier: number): ScoreStep {
+function payStep(id: string, base: number, multiplier: number): ScoreStep {
   const raw = base * multiplier
   const rounded = roundUp100(raw)
   const expression = raw === rounded
     ? `${fmt(base)} × ${multiplier} = ${fmt(raw)}`
     : `${fmt(base)} × ${multiplier} = ${fmt(raw)} → rounded up to ${fmt(rounded)}`
-  return { label, expression, value: rounded }
+  return { id, expression, value: rounded }
 }
 
 export function score(input: ScoreInput, rules: RuleSet): ScoreResult {
@@ -135,20 +136,20 @@ export function score(input: ScoreInput, rules: RuleSet): ScoreResult {
   let honbaTotal: number
 
   if (winSource === 'ron') {
-    const step = payStep('Discarder pays', basePoints, isDealer ? 6 : 4)
+    const step = payStep('discarder-pays', basePoints, isDealer ? 6 : 4)
     steps.push(step)
     handTotal = step.value
     honbaTotal = 300 * honba
     payments = { kind: 'ron', discarderPays: step.value + honbaTotal }
   } else if (isDealer) {
-    const step = payStep('Each player pays', basePoints, 2)
+    const step = payStep('each-player-pays', basePoints, 2)
     steps.push(step)
     handTotal = step.value * 3
     honbaTotal = 300 * honba
     payments = { kind: 'tsumo-all', eachPays: step.value + 100 * honba }
   } else {
-    const dealerStep = payStep('Dealer pays', basePoints, 2)
-    const nonDealerStep = payStep('Each non-dealer pays', basePoints, 1)
+    const dealerStep = payStep('dealer-pays', basePoints, 2)
+    const nonDealerStep = payStep('each-non-dealer-pays', basePoints, 1)
     steps.push(dealerStep, nonDealerStep)
     handTotal = dealerStep.value + nonDealerStep.value * 2
     honbaTotal = 300 * honba
@@ -161,7 +162,7 @@ export function score(input: ScoreInput, rules: RuleSet): ScoreResult {
 
   if (honba > 0) {
     steps.push({
-      label: 'Honba',
+      id: 'honba',
       expression: winSource === 'ron'
         ? `${honba} honba × 300 from the discarder`
         : `${honba} honba × 100 from each player`,
@@ -171,7 +172,7 @@ export function score(input: ScoreInput, rules: RuleSet): ScoreResult {
 
   if (riichiSticks > 0) {
     steps.push({
-      label: 'Riichi sticks',
+      id: 'riichi-sticks',
       expression: `${riichiSticks} × 1,000 collected from the table`,
       value: riichiSticks * 1000,
     })

@@ -27,9 +27,6 @@ export const hasHonors = (interp: Interpretation): boolean =>
 
 export const windRank = (wind: Wind): number => WIND_ORDER.indexOf(wind) + 1
 
-export const WIND_NAMES: Record<Wind, string> =
-  { E: 'East', S: 'South', W: 'West', N: 'North' }
-
 export const isDragonTile = (tile: Tile): boolean => tile.suit === 'z' && tile.rank >= 5
 
 /** Lowest rank of a sequence, used for sanshoku and ittsu matching. */

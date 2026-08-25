@@ -2,12 +2,8 @@ import type { YakuRule } from './types'
 import { isPinfuShape } from '../fu'
 import { isTerminalOrHonor } from '../tiles'
 import {
-  allTilesOf, isDragonTile, sequences, sequenceStart, tripletsAndKans,
-  WIND_NAMES, windRank,
+  allTilesOf, isDragonTile, sequences, sequenceStart, tripletsAndKans, windRank,
 } from './helpers'
-
-const DRAGON_NAMES: Record<number, string> =
-  { 5: 'White dragon', 6: 'Green dragon', 7: 'Red dragon' }
 
 const DRAGON_IDS: Record<number, string> =
   { 5: 'haku', 6: 'hatsu', 7: 'chun' }
@@ -15,21 +11,19 @@ const DRAGON_IDS: Record<number, string> =
 /** One rule per dragon, so the result can name its source. */
 const dragonYakuhai: YakuRule[] = [5, 6, 7].map((rank) => ({
   id: `yakuhai-${DRAGON_IDS[rank]}`,
-  name: `Yakuhai — ${DRAGON_NAMES[rank]}`,
   closedHan: 1,
   openHan: 1,
   match: ({ interp }) => {
     const group = tripletsAndKans(interp)
       .find((g) => isDragonTile(g.tiles[0]) && g.tiles[0].rank === rank)
     return group
-      ? { groups: [group], params: { source: DRAGON_NAMES[rank] } }
+      ? { groups: [group], params: { source: 'dragon', dragon: DRAGON_IDS[rank] } }
       : null
   },
 }))
 
 const windYakuhai: YakuRule[] = (['seat', 'round'] as const).map((which) => ({
   id: `yakuhai-${which}`,
-  name: which === 'seat' ? 'Yakuhai — Seat wind' : 'Yakuhai — Round wind',
   closedHan: 1,
   openHan: 1,
   match: ({ interp, ctx }) => {
@@ -37,35 +31,35 @@ const windYakuhai: YakuRule[] = (['seat', 'round'] as const).map((which) => ({
     const group = tripletsAndKans(interp)
       .find((g) => g.tiles[0].suit === 'z' && g.tiles[0].rank === windRank(wind))
     if (!group) return null
-    const label = which === 'seat' ? 'Seat wind' : 'Round wind'
-    return { groups: [group], params: { source: `${label} (${WIND_NAMES[wind]})` } }
+    const source = which === 'seat' ? 'seat-wind' : 'round-wind'
+    return { groups: [group], params: { source, wind } }
   },
 }))
 
 export const ONE_HAN_YAKU: YakuRule[] = [
   {
-    id: 'riichi', name: 'Riichi', closedHan: 1, openHan: 0,
+    id: 'riichi', closedHan: 1, openHan: 0,
     match: ({ ctx }) => (ctx.riichi === 'riichi' ? {} : null),
   },
   {
-    id: 'double-riichi', name: 'Double riichi', closedHan: 2, openHan: 0,
+    id: 'double-riichi', closedHan: 2, openHan: 0,
     supersedes: ['riichi'],
     match: ({ ctx }) => (ctx.riichi === 'double' ? {} : null),
   },
   {
-    id: 'ippatsu', name: 'Ippatsu', closedHan: 1, openHan: 0,
+    id: 'ippatsu', closedHan: 1, openHan: 0,
     match: ({ ctx }) => (ctx.ippatsu && ctx.riichi !== 'none' ? {} : null),
   },
   {
-    id: 'menzen-tsumo', name: 'Menzen tsumo', closedHan: 1, openHan: 0,
+    id: 'menzen-tsumo', closedHan: 1, openHan: 0,
     match: ({ hand, closed }) => (closed && hand.winSource === 'tsumo' ? {} : null),
   },
   {
-    id: 'pinfu', name: 'Pinfu', closedHan: 1, openHan: 0,
+    id: 'pinfu', closedHan: 1, openHan: 0,
     match: ({ interp, hand, ctx }) => (isPinfuShape(interp, hand, ctx) ? {} : null),
   },
   {
-    id: 'iipeikou', name: 'Iipeikou', closedHan: 1, openHan: 0,
+    id: 'iipeikou', closedHan: 1, openHan: 0,
     match: ({ interp, closed }) => {
       if (!closed) return null
       const seen = new Map<number, number>()
@@ -81,7 +75,7 @@ export const ONE_HAN_YAKU: YakuRule[] = [
     },
   },
   {
-    id: 'tanyao', name: 'Tanyao', closedHan: 1, openHan: 1,
+    id: 'tanyao', closedHan: 1, openHan: 1,
     match: ({ interp, closed, rules }) => {
       if (!closed && !rules.kuitan) return null
       return allTilesOf(interp).every((t) => !isTerminalOrHonor(t)) ? {} : null
@@ -90,19 +84,19 @@ export const ONE_HAN_YAKU: YakuRule[] = [
   ...dragonYakuhai,
   ...windYakuhai,
   {
-    id: 'haitei', name: 'Haitei raoyue', closedHan: 1, openHan: 1,
+    id: 'haitei', closedHan: 1, openHan: 1,
     match: ({ ctx }) => (ctx.haitei ? {} : null),
   },
   {
-    id: 'houtei', name: 'Houtei raoyui', closedHan: 1, openHan: 1,
+    id: 'houtei', closedHan: 1, openHan: 1,
     match: ({ ctx }) => (ctx.houtei ? {} : null),
   },
   {
-    id: 'rinshan', name: 'Rinshan kaihou', closedHan: 1, openHan: 1,
+    id: 'rinshan', closedHan: 1, openHan: 1,
     match: ({ ctx }) => (ctx.rinshan ? {} : null),
   },
   {
-    id: 'chankan', name: 'Chankan', closedHan: 1, openHan: 1,
+    id: 'chankan', closedHan: 1, openHan: 1,
     match: ({ ctx }) => (ctx.chankan ? {} : null),
   },
 ]

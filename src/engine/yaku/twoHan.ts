@@ -14,11 +14,11 @@ const holdsTerminalOrHonor = (group: Group): boolean =>
 
 export const TWO_HAN_YAKU: YakuRule[] = [
   {
-    id: 'chiitoitsu', name: 'Chiitoitsu', closedHan: 2, openHan: 0,
+    id: 'chiitoitsu', closedHan: 2, openHan: 0,
     match: ({ interp }) => (interp.structure === 'chiitoitsu' ? {} : null),
   },
   {
-    id: 'ittsu', name: 'Ittsu', closedHan: 2, openHan: 1,
+    id: 'ittsu', closedHan: 2, openHan: 1,
     match: ({ interp }) => {
       for (const suit of NUMBER_SUITS) {
         const inSuit = sequences(interp).filter((s) => s.tiles[0].suit === suit)
@@ -31,7 +31,7 @@ export const TWO_HAN_YAKU: YakuRule[] = [
     },
   },
   {
-    id: 'sanshoku-doujun', name: 'Sanshoku doujun', closedHan: 2, openHan: 1,
+    id: 'sanshoku-doujun', closedHan: 2, openHan: 1,
     match: ({ interp }) => {
       for (let start = 1; start <= 7; start++) {
         const groups = NUMBER_SUITS
@@ -44,7 +44,7 @@ export const TWO_HAN_YAKU: YakuRule[] = [
     },
   },
   {
-    id: 'sanshoku-doukou', name: 'Sanshoku doukou', closedHan: 2, openHan: 2,
+    id: 'sanshoku-doukou', closedHan: 2, openHan: 2,
     match: ({ interp }) => {
       for (let rank = 1; rank <= 9; rank++) {
         const groups = NUMBER_SUITS
@@ -57,7 +57,7 @@ export const TWO_HAN_YAKU: YakuRule[] = [
     },
   },
   {
-    id: 'toitoi', name: 'Toitoi', closedHan: 2, openHan: 2,
+    id: 'toitoi', closedHan: 2, openHan: 2,
     match: ({ interp }) => {
       if (interp.structure !== 'standard') return null
       const sets = blocks(interp)
@@ -67,19 +67,19 @@ export const TWO_HAN_YAKU: YakuRule[] = [
     },
   },
   {
-    id: 'sanankou', name: 'Sanankou', closedHan: 2, openHan: 2,
+    id: 'sanankou', closedHan: 2, openHan: 2,
     match: ({ interp, hand }) =>
       (concealedTripletCount(interp, hand) >= 3 ? {} : null),
   },
   {
-    id: 'sankantsu', name: 'Sankantsu', closedHan: 2, openHan: 2,
+    id: 'sankantsu', closedHan: 2, openHan: 2,
     match: ({ interp }) => {
       const kans = interp.groups.filter((g) => g.kind === 'kan')
       return kans.length === 3 ? { groups: kans } : null
     },
   },
   {
-    id: 'chanta', name: 'Chanta', closedHan: 2, openHan: 1,
+    id: 'chanta', closedHan: 2, openHan: 1,
     match: ({ interp }) => {
       if (interp.structure !== 'standard') return null
       if (sequences(interp).length === 0) return null
@@ -89,7 +89,7 @@ export const TWO_HAN_YAKU: YakuRule[] = [
     },
   },
   {
-    id: 'honroutou', name: 'Honroutou', closedHan: 2, openHan: 2,
+    id: 'honroutou', closedHan: 2, openHan: 2,
     match: ({ interp }) => {
       const tiles = allTilesOf(interp)
       if (!tiles.every(isTerminalOrHonor)) return null
@@ -98,7 +98,7 @@ export const TWO_HAN_YAKU: YakuRule[] = [
     },
   },
   {
-    id: 'shousangen', name: 'Shousangen', closedHan: 2, openHan: 2,
+    id: 'shousangen', closedHan: 2, openHan: 2,
     match: ({ interp }) => {
       const dragonSets = tripletsAndKans(interp).filter((g) => isDragonTile(g.tiles[0]))
       const pair = interp.groups.find((g) => g.kind === 'pair')

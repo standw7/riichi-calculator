@@ -16,7 +16,7 @@ function fuResult(total: number): FuResult {
 }
 
 function yakuResult(id: string, han: number): YakuResult[] {
-  return [{ id, name: id, han, yakuman: 0, evidence: {} }]
+  return [{ id, han, yakuman: 0, evidence: {} }]
 }
 
 /** Builds a Candidate whose ScoreResult comes from the real score() function. */

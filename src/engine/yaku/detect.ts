@@ -21,7 +21,7 @@ export function detectYaku(
     const yakuman = rule.yakuman
       ? (rules.doubleYakuman ? rule.yakuman : Math.min(rule.yakuman, 1))
       : 0
-    matched.push({ id: rule.id, name: rule.name, han, yakuman, evidence })
+    matched.push({ id: rule.id, han, yakuman, evidence })
   }
 
   const yakuman = matched.filter((y) => y.yakuman > 0)

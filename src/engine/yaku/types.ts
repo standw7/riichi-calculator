@@ -17,8 +17,8 @@ export interface YakuContext {
 }
 
 export interface YakuRule {
+  /** Stable machine key; display copy is looked up by id in src/content. */
   id: string
-  name: string
   /** Han when the hand is closed. */
   closedHan: number
   /** Han when the hand is open. 0 means the yaku cannot be scored open. */
@@ -32,7 +32,6 @@ export interface YakuRule {
 
 export interface YakuResult {
   id: string
-  name: string
   han: number
   yakuman: number
   evidence: Evidence

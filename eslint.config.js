@@ -27,6 +27,10 @@ export default tseslint.config(
         patterns: [
           { group: ['react', 'react-dom', 'react/*'], message: 'The engine must not depend on React.' },
           { group: ['**/ui/**', '../ui/*', './ui/*'], message: 'The engine must not import from the UI layer.' },
+          {
+            group: ['**/content/**', '../content/*', './content/*'],
+            message: 'The engine must not import from the content layer.',
+          },
         ],
       }],
     },

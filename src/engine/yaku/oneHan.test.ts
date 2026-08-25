@@ -129,14 +129,14 @@ describe('yakuhai', () => {
     const h = hand('234m567p345s555z2z', '2z')
     const result = findYaku(h, 'yakuhai-haku')
     expect(result?.han).toBe(1)
-    expect(result?.evidence.params).toEqual({ source: 'White dragon' })
+    expect(result?.evidence.params).toEqual({ source: 'dragon', dragon: 'haku' })
   })
 
   it('detects a seat wind triplet', () => {
     const h = hand('234m567p345s222z5p', '5p')  // South triplet, seat wind South
     const result = findYaku(h, 'yakuhai-seat', ctx({ seatWind: 'S', roundWind: 'E' }))
     expect(result?.han).toBe(1)
-    expect(result?.evidence.params).toEqual({ source: 'Seat wind (South)' })
+    expect(result?.evidence.params).toEqual({ source: 'seat-wind', wind: 'S' })
   })
 
   it('detects a round wind triplet', () => {
