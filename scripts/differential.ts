@@ -12,8 +12,11 @@
  * Mismatches are adjudicated by hand — the oracle is not automatically trusted.
  *
  * Oracle: riichi-score@3.0.0 (MIT, https://github.com/cwebley/kotenho, dev-only
- * dependency — see Task 15 report §"The oracle search" for the vetting that went
- * into picking it).
+ * dependency). Chosen and pinned in commit b60c317; that commit message records
+ * the package, its license, and its dev-only placement. No separate written
+ * vetting record (e.g. a survey of alternative packages) exists beyond that
+ * commit and the ruleset mapping below, which is the actual evidence for how
+ * its options were mapped onto WRC_2025.
  *
  * riichi-score's Ruleset below is configured to match WRC_2025 as closely as its
  * options allow (openTanyao/doubleWindPairFu/openPinfuMinimumFu/kiriageMangan/
@@ -53,8 +56,12 @@
  * pay mangan) and equal-han/unequal-fu has no tie-break story at all (fu
  * isn't part of the rank() comparator once han is equal, so a genuine
  * fu-computation difference would never surface an alternative to justify
- * it). See the Task 15 report for the per-seed adjudication of the 5000-hand
- * sweep run against this tightened rule.
+ * it). Commit b60c317's message records the result of the last sweep run under
+ * this rule: 5000 hands generated (4279 compared), 0 mismatches, and the 6
+ * tied-interpretation cases all carrying a real equal-handTotal alternative
+ * per the `hasEqualPayoutTie` check in `sweep()` below. No separate per-seed
+ * adjudication log exists beyond that commit message and this harness's own
+ * classification logic — rerun `npm run fuzz:differential` to reproduce it.
  */
 import { calculate as oracleCalculate, createGameState } from 'riichi-score'
 import type { Direction, MahjongTile, WinningTile } from 'riichi-score'
@@ -241,6 +248,8 @@ function sweep(count: number): void {
   }
 
   console.log(`Compared ${compared} hands against ${oracle.name}.`)
+  console.log('Coverage note: generated hands are fully concealed, dora-free, and honba 0 — '
+    + 'meld attribution, kan fu, and dora/aka/ura counting are not exercised by this sweep.')
   if (tieBreakNotes.length > 0) {
     console.log(`\n${tieBreakNotes.length} tied-interpretation notes (same total, different han/fu, `
       + `backed by a real equal-handTotal alternative — not failures):`)

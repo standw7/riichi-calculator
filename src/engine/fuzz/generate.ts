@@ -16,10 +16,14 @@ const WINDS: Wind[] = ['E', 'S', 'W', 'N']
 
 /**
  * Empirically, a fresh 34-tile board practically never fails to place four
- * groups plus a pair within the per-group attempt budget (see the Task 15
- * report: 2,000,000 simulated seeds, zero failures). This bound exists only
- * as a hard backstop so a pathological seed cannot loop forever, not because
- * failure is expected in practice.
+ * groups plus a pair within the per-group attempt budget. The committed
+ * evidence for this is generate.test.ts's "never throws across a wide seed
+ * range" test, which calls randomWinningHand for every seed from 1 to 20,000
+ * and asserts it doesn't throw (commit 913116d's message additionally claims
+ * a 2,000,000-seed simulation found zero failures, but that run isn't
+ * captured in any committed test or log, so it isn't restated here as
+ * verified). This bound exists only as a hard backstop so a pathological seed
+ * cannot loop forever, not because failure is expected in practice.
  */
 const MAX_RETRIES = 1000
 
@@ -87,12 +91,18 @@ function tryBuild(seed: number): { hand: Hand; ctx: WinContext } | null {
 /**
  * Builds a guaranteed-winning 14-tile hand from four random groups plus a pair.
  *
+ * Every returned hand is fully concealed (`melds: []`), carries no dora
+ * indicators, and has honba/riichi-stick counts fixed at 0 — so meld
+ * attribution, kan fu, and dora/aka/ura counting are never exercised by
+ * anything built from this generator's output.
+ *
  * When a fresh board can't place all four groups or the pair within budget, this
  * retries with a new PRNG stream keyed by `seed + attempt` — an iterative bound
- * rather than the recursive `randomWinningHand(seed + 1)` this started as, so a
- * run of unlucky seeds can never grow the call stack. See the Task 15 report for
- * the termination analysis (2,000,000 simulated seeds, zero failures) that shows
- * this retry loop is a backstop, not something expected to fire in practice.
+ * rather than the recursive `randomWinningHand(seed + 1)` this started as (see
+ * commit 913116d), so a run of unlucky seeds can never grow the call stack.
+ * Termination is exercised by generate.test.ts's "never throws across a wide
+ * seed range" test, which calls this for every seed from 1 to 20,000 — see the
+ * MAX_RETRIES comment above for what that test does and doesn't establish.
  */
 export function randomWinningHand(seed: number): { hand: Hand; ctx: WinContext } {
   for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
