@@ -52,6 +52,13 @@ describe('kokushi musou', () => {
     const single = best(h, ctx(), { ...WRC_2025, doubleYakuman: false })
     expect(single.find((y) => y.id === 'kokushi-13')?.yakuman).toBe(1)
   })
+
+  it('scores a double yakuman as two when the ruleset permits it', () => {
+    const h = hand('19m19p19s1234567z', '1m')  // kokushi thirteen-wait
+    const permissive = { ...WRC_2025, doubleYakuman: true }
+    const result = best(h, ctx(), permissive)
+    expect(result.find((y) => y.id === 'kokushi-13')?.yakuman).toBe(2)
+  })
 })
 
 describe('suuankou', () => {
@@ -151,7 +158,7 @@ describe('yakuman precedence', () => {
   })
 
   it('caps the hand at one yakuman when the ruleset forbids stacking', () => {
-    const h = hand('111z222z333z444z5z', '5z')  // daisuushii + tsuuiisou
+    const h = hand('111z222z333z444z5z', '5z')  // daisuushii + tsuuiisou + suuankou-tanki
     const single = best(h, ctx(), { ...WRC_2025, multipleYakuman: false })
     expect(single).toHaveLength(1)
     expect(single[0].yakuman).toBe(1)
