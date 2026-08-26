@@ -296,10 +296,17 @@ cost.
 
 ## 11. Open items
 
-- **Tile asset licence must be verified** before vendoring any SVG set, and attribution added
-  to the repository and site footer if required.
+**Resolved during Plan 1 and Plan 2 design** (see `2026-08-26-calculator-ui-design.md` §10):
+
+- ~~Tile asset licence~~ — resolved: FluffyStuff `riichi-mahjong-tiles` is CC0 / public domain,
+  verified against the upstream `LICENSE.md`. No attribution required; recorded anyway.
+- ~~Third-party scorer for differential fuzzing~~ — resolved: `riichi-score@3.0.0`, MIT,
+  dev-only. 4,279 hands compared with zero payout disagreements.
+- ~~WRC 2025 rule details~~ — resolved: confirmed against the published rulebook. Four flags in
+  the original plan were wrong and were corrected (`kiriageMangan`, `doubleWindPairFu`,
+  `renhou`, `nagashiMangan`).
+
+**Remaining:**
+
 - **Domain name** to be chosen and registered by the user in the Cloudflare dashboard.
-- **Third-party scorer for differential fuzzing** to be selected and its licence checked; if no
-  suitable library exists, the worked-example corpus is expanded to compensate.
-- **WRC 2025 rule details** to be confirmed against the published rulebook during
-  implementation, particularly kazoe and multiple-yakuman treatment.
+- **Cloudflare Pages repository connection** requires the user's dashboard access.
