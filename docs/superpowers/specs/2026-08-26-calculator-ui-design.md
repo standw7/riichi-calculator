@@ -201,7 +201,7 @@ re-testing scoring through the DOM would be slower and weaker.
 
 - **Pure units, tested directly:** `toEngineInput`, the hash codec, fu and yaku copy rendering.
 - **React Testing Library over the entry flows:** build a hand and score it, meld entry,
-  incomplete-hand messaging, concise-mode persistence, hash round-trip on load.
+  concise-mode persistence, hash round-trip on load.
 - **One Playwright smoke test:** load the app, click a known hand, assert the headline score.
 
 The coverage gate of §6.3 is a plain unit test and runs with the rest.
