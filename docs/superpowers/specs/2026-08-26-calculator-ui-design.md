@@ -90,15 +90,25 @@ interface CalculatorState {
 ```ts
 type EngineInput =
   | { ok: true; hand: Hand; ctx: WinContext }
-  | { ok: false; reason: IncompleteReason }
+  | { ok: false }
 
 function toEngineInput(state: CalculatorState): EngineInput
 ```
 
-A pure function in its own file with its own tests. It is the only place that decides whether a
-draft is scorable, and the only source of "you still need to…" messaging. The UI therefore
-never invents an engine status, and every incomplete-hand message is unit-testable without
-rendering a component.
+A pure function in its own file with its own tests. The engine's `Hand` requires a winning
+tile, so a draft under construction cannot be expressed as an engine input at all — this
+adapter is the one place that decides whether a draft is complete enough to hand over.
+
+**Scope decision:** an incomplete draft gets **no diagnosis**. The adapter returns a bare
+`{ ok: false }` and the results panel shows a neutral resting state — not a taxonomy of what is
+missing, not step-by-step guidance toward a legal hand. Building a hand is self-evident from
+the tile count; explaining it is work that earns nothing.
+
+This is deliberately *not* the same as a hand that is complete but unscorable. Once the adapter
+returns `ok: true`, the engine's own `CalculationStatus` takes over, and `invalid`,
+`not-a-winning-hand`, and especially `no-yaku` are explained in full (§7). A complete hand that
+cannot be won is a genuinely confusing situation and one of the better teaching moments the app
+has.
 
 `calculate()` runs synchronously on every action. Fourteen tiles yield well under a hundred
 decompositions, so there is no debouncing, no worker, and no loading state anywhere.
@@ -179,9 +189,10 @@ arithmetic → explanation.
   `Evidence` the rule returned.
 - **Other interpretations** is a disclosure listing losing decompositions and why each scores
   less.
-- Validation state is shown continuously. The `no-yaku` status — a complete hand that cannot be
-  won — gets contextual suggestions. The engine never manufactures a yaku, and neither does the
-  UI.
+- Engine status is explained in full once a hand is complete. `no-yaku` — a valid hand that
+  cannot be won — gets contextual suggestions naming what would make it scorable. The engine
+  never manufactures a yaku, and neither does the UI.
+- An **incomplete** draft shows a neutral resting state and no diagnosis, per §4.2.
 
 ## 8. Testing
 
